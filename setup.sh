@@ -17,18 +17,24 @@ kubectl delete ns -l "ingress=nginx"
 kubectl create namespace "$NS"
 kubectl label ns "$NS" "ingress=nginx"
 
+# Install nginx-controller
 helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
   --namespace "$NS" --create-namespace
 
 
+# Deploy application
 kubectl create deployment web --image=gcr.io/google-samples/hello-app:1.0
 kubectl expose deployment web --type=NodePort --port=8080
+kubectl  wait --for=condition=available deployment web
+
+# Create ingress route
 kubectl apply -f https://k8s.io/examples/service/networking/example-ingress.yaml
 kubectl get ingress
 
-echo "Add the followin line to /etc/hosts"
+echo "WARNING: Add the following line to /etc/hosts"
 echo "$NODE1_IP hello-world.info"
 
-# TODO
+NODE_PORT=$(kubectl get svc web -n "$NS"  -o jsonpath="{.spec.ports[0].nodePort}")
+echo "INFO: access the application via ingress"
 echo "curl hello-world.info:$NODE_PORT"
