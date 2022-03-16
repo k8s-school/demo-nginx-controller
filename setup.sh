@@ -15,7 +15,7 @@ NODE1_IP=$(kubectl get nodes --selector="! node-role.kubernetes.io/master" \
 # see "kubernetes in action" p391
 kubectl delete ns -l "ingress=nginx"
 kubectl create namespace "$NS"
-kubectl label ns network "ingress=nginx"
+kubectl label ns "$NS" "ingress=nginx"
 
 helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
