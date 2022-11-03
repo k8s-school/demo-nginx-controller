@@ -8,7 +8,7 @@ on:
       - master
 jobs:
   main:
-    name: Run k8s advanced exercices
+    name: Run nginx-controller demo
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
@@ -22,6 +22,6 @@ jobs:
           ./kind-helper/k8s-create.sh -c calico
           kubectl get nodes
           kubectl get pods -n kube-system
-      - name: Run test on nginx-controller 
+      - name: Run test on nginx-controller
         run: |
           ./setup.sh

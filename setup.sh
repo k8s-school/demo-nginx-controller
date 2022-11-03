@@ -22,11 +22,12 @@ helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
   --namespace "$NS" --create-namespace
 
-
 # Deploy application
 kubectl create deployment web --image=gcr.io/google-samples/hello-app:1.0
 kubectl expose deployment web --type=NodePort --port=8080
 kubectl  wait --for=condition=available deployment web
+
+kubectl wait --for=condition=available deployment -n "$NS" app.kubernetes.io/instance=ingress-nginx
 
 # Create ingress route
 kubectl apply -f https://k8s.io/examples/service/networking/example-ingress.yaml
