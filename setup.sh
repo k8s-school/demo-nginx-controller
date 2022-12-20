@@ -37,9 +37,10 @@ kubectl wait --for=condition=available deployment -n "$NS" -l app.kubernetes.io/
 kubectl apply -n "$NSAPP" -f $DIR/example-ingress.yaml
 kubectl get -n "$NSAPP" ingress
 
-echo "WARNING: Add the following line to /etc/hosts"
-echo "$NODE1_IP hello-world.info"
+TMP_STR="$NODE1_IP hello-world.info"
+echo "INFO: Add '$TMP_STR' to /etc/hosts"
+sudo sh -c "echo '$TMP_STR' >> /etc/hosts"
 
 NODE_PORT=$(kubectl get svc web -n "$NSAPP"  -o jsonpath="{.spec.ports[0].nodePort}")
 echo "INFO: access the application via ingress"
-echo "curl hello-world.info:$NODE_PORT"
+curl hello-world.info:$NODE_PORT
