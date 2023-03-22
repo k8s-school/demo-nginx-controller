@@ -27,7 +27,7 @@ helm upgrade --install ingress-nginx ingress-nginx \
 
 # Deploy application
 kubectl create deployment web -n "$NSAPP" --image=gcr.io/google-samples/hello-app:1.0
-kubectl expose deployment web -n "$NSAPP" --type=NodePort --port=8080
+kubectl expose deployment web -n "$NSAPP" --port=8080
 kubectl  wait -n "$NSAPP" --for=condition=available deployment web
 
 # Wait for nginx-controller to be up and running
@@ -41,6 +41,6 @@ TMP_STR="$NODE1_IP hello-world.info"
 echo "INFO: Add '$TMP_STR' to /etc/hosts"
 sudo sh -c "echo '$TMP_STR' >> /etc/hosts"
 
-NODE_PORT=$(kubectl get svc web -n "$NSAPP"  -o jsonpath="{.spec.ports[0].nodePort}")
+NODE_PORT=$(kubectl get svc ingress-nginx-controller -n "$NS"  -o jsonpath="{.spec.ports[0].nodePort}")
 echo "INFO: access the application via ingress"
 curl hello-world.info:$NODE_PORT
