@@ -9,17 +9,23 @@ on:
 jobs:
   main:
     name: Run nginx-controller demo
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Stop apparmor
         run: |
           sudo /etc/init.d/apparmor stop
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.21.4'
       - name: Create k8s/kind cluster
         run: |
-          git clone --depth 1 -b "k8s-1.25.0" --single-branch https://github.com/k8s-school/kind-helper.git
-          ./kind-helper/k8s-create.sh -c calico
+          go install github.com/k8s-school/ktbx@v1.1.2-rc2
+          ktbx create -s
+          ktbx install helm
+      - name: Create k8s/kind cluster
+        run: |
           kubectl get nodes
           kubectl get pods -n kube-system
       - name: Run test on nginx-controller
