@@ -1,6 +1,4 @@
-# demo-nginx-controller
-
-Simple demo for nginx-controller ingress
+# Simple demo for nginx-controller ingress
 
 ## Pre-requisites
 
