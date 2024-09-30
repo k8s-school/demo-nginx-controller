@@ -81,7 +81,7 @@ NODE_PORT=$(kubectl get svc ingress-nginx-controller -n "$ingress_ns"  -o jsonpa
 
 helm upgrade --wait --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
-  --namespace "$NS" --create-namespace \
+  --namespace "$ingress_ns" --create-namespace \
   --set controller.service.type=NodePort
 
 
