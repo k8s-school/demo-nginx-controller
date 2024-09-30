@@ -77,7 +77,7 @@ kubectl apply -n "$NSAPP" -f $DIR/example-ingress.yaml
 kubectl get -n "$NSAPP" ingress
 
 ink "Access the application"
-NODE_PORT=$(kubectl get svc ingress-nginx-controller -n "$NS"  -o jsonpath="{.spec.ports[0].nodePort}")
+NODE_PORT=$(kubectl get svc ingress-nginx-controller -n "$ingress_ns"  -o jsonpath="{.spec.ports[0].nodePort}")
 
 helm upgrade --wait --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
