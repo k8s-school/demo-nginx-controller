@@ -60,7 +60,7 @@ kubectl create deployment web -n "$NSAPP" --image=gcr.io/google-samples/hello-ap
 kubectl expose deployment web -n "$NSAPP" --port=8080
 kubectl  wait -n "$NSAPP" --for=condition=available deployment web
 
-in "Wait for nginx-controller to be up and running (alternatively, use helm --wait)"
+ink "Wait for nginx-controller to be up and running (alternatively, use helm --wait)"
 kubectl wait --for=condition=available deployment -n "$ingress_ns" -l app.kubernetes.io/instance=ingress-nginx
 
 TMP_STR="$NODE1_IP hello-world.info"
@@ -71,8 +71,6 @@ if [ "$INGRESS_FULL" = false ]
 then
     exit 0
 fi
-
-
 
 ink "Create ingress route"
 kubectl apply -n "$NSAPP" -f $DIR/example-ingress.yaml
