@@ -12,9 +12,8 @@ NODE1_IP=$(kubectl get nodes -o=jsonpath='{.items[0].status.addresses[0].address
 
 # Run on kubeadm cluster
 # see "kubernetes in action" p391
-kubectl delete project -l "ingress=nginx"
+kubectl delete project -l "kubernetes.io/metadata.name=$NSAPP"
 oc new-project "$NSAPP"
-kubectl label project "$NSAPP" "ingress=nginx"
 
 # Deploy application
 kubectl create deployment web -n "$NSAPP" --image=gcr.io/google-samples/hello-app:1.0
