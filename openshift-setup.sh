@@ -23,4 +23,4 @@ kubectl apply -n "$NSAPP" -f $DIR/example-ingress-openshift.yaml
 kubectl get -n "$NSAPP" ingress
 kubectl get -n "$NSAPP" route
 
-curl https://hello-world.apps-crc.testing
+curl -k https://hello-world.apps-crc.testing
