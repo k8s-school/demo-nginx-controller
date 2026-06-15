@@ -18,7 +18,9 @@ kubectl expose deployment web -n "$NSAPP" --port=8080
 kubectl  wait -n "$NSAPP" --for=condition=available deployment web
 
 # Create ingress route
+kubectl get ingressclasses
 kubectl apply -n "$NSAPP" -f $DIR/example-ingress-openshift.yaml
 kubectl get -n "$NSAPP" ingress
+kubectl get -n "$NSAPP" route
 
 curl https://hello-world.apps-crc.testing
