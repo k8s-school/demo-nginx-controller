@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress
+  namespace: ingress-app
+  annotations:
+    # 1. Force the generated Route to use "Edge" termination (TLS handled by HAProxy router)
+    route.openshift.io/termination: "edge"
+    
+    # 2. Automatically redirect HTTP traffic to HTTPS
+    ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: openshift-default
+  rules:
+    - host: hello-world.apps-crc.testing
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 8080 # <-- This must match the exact "port" defined in your "web" Service
