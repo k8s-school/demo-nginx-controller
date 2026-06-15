@@ -8,8 +8,7 @@ DIR=$(cd "$(dirname "$0")"; pwd -P)
 
 NSAPP="ingress-app"
 
-NODE1_IP=$(kubectl get nodes --selector="! node-role.kubernetes.io/master" \
-    -o=jsonpath='{.items[0].status.addresses[0].address}')
+NODE1_IP=$(kubectl get nodes -o=jsonpath='{.items[0].status.addresses[0].address}')
 
 # Run on kubeadm cluster
 # see "kubernetes in action" p391

@@ -72,7 +72,15 @@ then
     exit 0
 fi
 
-ink "Create ingress route"
+ink "Generate self-signed certificates for HTTPS"
+$DIR/generate-certs.sh hello-world.info
+
+ink "Create TLS secret from generated certificates"
+kubectl create secret tls hello-world-tls -n "$NSAPP" \
+    --key $DIR/certs/tls.key \
+    --cert $DIR/certs/tls.crt
+
+ink "Create ingress route with TLS"
 kubectl apply -n "$NSAPP" -f $DIR/example-ingress.yaml
 kubectl get -n "$NSAPP" ingress
 
@@ -85,5 +93,13 @@ helm upgrade --wait --install ingress-nginx ingress-nginx \
   --set controller.service.type=NodePort
 
 
+HTTPS_NODE_PORT=$(kubectl get svc ingress-nginx-controller -n "$ingress_ns"  -o jsonpath="{.spec.ports[1].nodePort}")
+
 echo "INFO: access the application via ingress"
+echo "HTTP:  curl hello-world.info:$NODE_PORT"
+echo "HTTPS: curl -k https://hello-world.info:$HTTPS_NODE_PORT"
+echo ""
 curl hello-world.info:$NODE_PORT
+echo ""
+echo "Testing HTTPS endpoint (ignoring self-signed certificate):"
+curl -k https://hello-world.info:$HTTPS_NODE_PORT
